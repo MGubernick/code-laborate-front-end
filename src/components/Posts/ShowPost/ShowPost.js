@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { withRouter, Redirect } from 'react-router-dom'
+
+import { Link, withRouter, Redirect } from 'react-router-dom'
 
 import { showPost, postDelete } from '../../../api/posts'
 
@@ -67,8 +68,12 @@ class PostShow extends Component {
 
     return (
       <div>
-        <button>Update</button>
         <button onClick={this.onPostDelete}>Delete</button>
+        <button>
+          <Link to={`/update-post/${post._id}`}>
+          Update
+          </Link>
+        </button>
         <h3>{post.title}</h3>
         <h4>author: {post.author}</h4>
         <p>{post.content}</p>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-// import { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import PostForm from '../PostForm/PostForm'
 
 import { createPost } from '../../../api/posts'
@@ -55,11 +55,11 @@ class CreatePost extends Component {
   }
 
   render () {
-    const { post } = this.state
+    const { post, createId } = this.state
 
-    // if (createId) {
-    //   return <Redirect to={`/posts/${createId}`} />
-    // }
+    if (createId) {
+      return <Redirect to={`/posts/${createId}`} />
+    }
 
     return (
       <div>

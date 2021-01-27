@@ -60,3 +60,16 @@ export const postDelete = (id, user) => {
     }
   })
 }
+
+// Update
+
+export const updatePost = (id, post, user) => {
+  return axios({
+    url: apiUrl + '/posts/' + id,
+    method: 'PATCH',
+    data: { post: post },
+    headers: {
+      'Authorization': `Bearer ${user.token}`
+    }
+  })
+}
