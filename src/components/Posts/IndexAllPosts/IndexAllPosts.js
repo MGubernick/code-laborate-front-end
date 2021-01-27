@@ -37,7 +37,10 @@ class PostIndexAll extends Component {
     if (!posts) {
       return 'Loading...'
     }
-    const postsJsx = posts.map(post => (
+
+    const reversedPosts = posts.reverse()
+
+    const postsJsx = reversedPosts.map(post => (
       <Link to={`/posts/${post._id}`} key={post._id}>
         <li>
           {post.title}
