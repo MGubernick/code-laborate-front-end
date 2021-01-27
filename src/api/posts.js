@@ -50,7 +50,6 @@ export const showPost = (id, user) => {
   })
 }
 
-<<<<<
 // Delete
 export const postDelete = (id, user) => {
   return axios({
@@ -69,7 +68,6 @@ export const updatePost = (id, post, user) => {
     url: apiUrl + '/posts/' + id,
     method: 'PATCH',
     data: { post: post },
->>>>>>>
     headers: {
       'Authorization': `Bearer ${user.token}`
     }

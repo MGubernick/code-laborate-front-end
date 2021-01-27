@@ -68,15 +68,12 @@ class PostShow extends Component {
 
     return (
       <div>
-<<<<<<<
         <button onClick={this.onPostDelete}>Delete</button>
-
         <button>
           <Link to={`/update-post/${post._id}`}>
           Update
           </Link>
         </button>
->>>>>>>
         <h3>{post.title}</h3>
         <h4>author: {post.author}</h4>
         <p>{post.content}</p>
