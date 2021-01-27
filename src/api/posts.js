@@ -50,11 +50,26 @@ export const showPost = (id, user) => {
   })
 }
 
+<<<<<
 // Delete
 export const postDelete = (id, user) => {
   return axios({
     url: apiUrl + '/posts/' + id,
     method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${user.token}`
+    }
+  })
+}
+
+// Update
+
+export const updatePost = (id, post, user) => {
+  return axios({
+    url: apiUrl + '/posts/' + id,
+    method: 'PATCH',
+    data: { post: post },
+>>>>>>>
     headers: {
       'Authorization': `Bearer ${user.token}`
     }

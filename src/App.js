@@ -15,6 +15,7 @@ import CreatePost from './components/Posts/CreatePost/CreatePost'
 import PostIndexAll from './components/Posts/IndexAllPosts/IndexAllPosts'
 import PostIndexUser from './components/Posts/IndexUserPosts/IndexUserPosts'
 import PostShow from './components/Posts/ShowPost/ShowPost'
+import UpdatePost from './components/Posts/UpdatePost/UpdatePost'
 
 // import comment components
 
@@ -84,6 +85,9 @@ class App extends Component {
           )} />
           <AuthenticatedRoute user={user} path='/posts/:id' render={() => (
             <PostShow msgAlert={this.msgAlert} user={user} />
+          )} />
+          <AuthenticatedRoute user={user} path='/update-post/:id' render={() => (
+            <UpdatePost msgAlert={this.msgAlert} user={user} />
           )} />
         </main>
       </Fragment>
