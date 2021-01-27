@@ -12,6 +12,7 @@ import ChangePassword from './components/ChangePassword/ChangePassword'
 
 // import post components
 import CreatePost from './components/Posts/CreatePost/CreatePost'
+import PostIndexAll from './components/Posts/IndexAllPosts/IndexAllPosts'
 
 // import comment components
 
@@ -72,6 +73,9 @@ class App extends Component {
           )} />
           <AuthenticatedRoute user={user} path='/create-post' render={() => (
             <CreatePost msgAlert={this.msgAlert} user={user} />
+          )} />
+          <AuthenticatedRoute user={user} path='/index-all' render={() => (
+            <PostIndexAll msgAlert={this.msgAlert} user={user} />
           )} />
         </main>
       </Fragment>
