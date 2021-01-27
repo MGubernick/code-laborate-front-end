@@ -1,15 +1,34 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 
-import { showPost } from '../../../api/posts'
+import { showPost, postDelete } from '../../../api/posts'
 
 class PostShow extends Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      post: null
+      post: null,
+      exists: true
     }
+  }
+
+  onPostDelete = () => {
+    const { user, match, msgAlert } = this.props
+    postDelete(match.params.id, user)
+      .then(this.setState({ exists: false }))
+      .then(() => msgAlert({
+        heading: 'Deleted Post Successfully',
+        message: 'The post has been deleted.',
+        variant: 'success'
+      }))
+      .catch(error => {
+        msgAlert({
+          heading: 'Deleting Post Failed',
+          message: `Failed to delete post with error: ${error.message}`,
+          variant: 'danger'
+        })
+      })
   }
 
   componentDidMount () {
@@ -36,7 +55,11 @@ class PostShow extends Component {
   }
 
   render () {
-    const { post } = this.state
+    const { post, exists } = this.state
+
+    if (!exists) {
+      return <Redirect to={'/index'} />
+    }
 
     if (!post) {
       return 'Loading...'
@@ -45,7 +68,7 @@ class PostShow extends Component {
     return (
       <div>
         <button>Update</button>
-        <button>Delete</button>
+        <button onClick={this.onPostDelete}>Delete</button>
         <h3>{post.title}</h3>
         <h4>author: {post.author}</h4>
         <p>{post.content}</p>

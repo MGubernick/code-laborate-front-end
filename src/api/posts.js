@@ -49,3 +49,14 @@ export const showPost = (id, user) => {
     }
   })
 }
+
+// Delete
+export const postDelete = (id, user) => {
+  return axios({
+    url: apiUrl + '/posts/' + id,
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${user.token}`
+    }
+  })
+}
