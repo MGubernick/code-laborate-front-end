@@ -26,3 +26,15 @@ export const postIndexAll = user => {
     }
   })
 }
+
+// Index user
+export const postIndexUser = user => {
+  // console.log('This is post at axios', user)
+  return axios({
+    url: apiUrl + '/posts/user',
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${user.token}`
+    }
+  })
+}
