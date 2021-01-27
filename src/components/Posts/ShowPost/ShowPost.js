@@ -57,6 +57,9 @@ class PostShow extends Component {
 
   render () {
     const { post, exists } = this.state
+    const { user } = this.props
+    console.log('this is user', user)
+    console.log('this is post', post)
 
     if (!exists) {
       return <Redirect to={'/index'} />
@@ -66,21 +69,48 @@ class PostShow extends Component {
       return 'Loading...'
     }
 
+    // if user ID doesn't match owner ID of post -> show post without buttons
+    // else show buttons
+    const userId = user._id
+    const ownerId = post.owner._id
+
+    let showDisplay
+
+    if (userId !== ownerId) {
+      showDisplay = (
+        <div>
+          <h3>{post.title}</h3>
+          <h4>author: {post.author}</h4>
+          <p>{post.content}</p>
+          <h5>Comments:</h5>
+          <ul>
+            <li>This will be a comment.</li>
+          </ul>
+        </div>
+      )
+    } else {
+      showDisplay = (
+        <div>
+          <button onClick={this.onPostDelete}>Delete</button>
+          <button>
+            <Link to={`/update-post/${post._id}`}>
+            Update
+            </Link>
+          </button>
+          <h3>{post.title}</h3>
+          <h4>author: {post.author}</h4>
+          <p>{post.content}</p>
+          <h5>Comments:</h5>
+          <ul>
+            <li>This will be a comment.</li>
+          </ul>
+        </div>
+      )
+    }
+
     return (
       <div>
-        <button onClick={this.onPostDelete}>Delete</button>
-        <button>
-          <Link to={`/update-post/${post._id}`}>
-          Update
-          </Link>
-        </button>
-        <h3>{post.title}</h3>
-        <h4>author: {post.author}</h4>
-        <p>{post.content}</p>
-        <h5>Comments:</h5>
-        <ul>
-          <li>This will be a comment.</li>
-        </ul>
+        {showDisplay}
       </div>
     )
   }
