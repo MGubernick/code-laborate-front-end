@@ -38,3 +38,14 @@ export const postIndexUser = user => {
     }
   })
 }
+
+// Show
+export const showPost = (id, user) => {
+  return axios({
+    url: apiUrl + '/posts/' + id,
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${user.token}`
+    }
+  })
+}
