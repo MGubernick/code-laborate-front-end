@@ -9,7 +9,7 @@ export const createPost = (post, user) => {
     url: apiUrl + '/posts',
     method: 'POST',
     headers: {
-      'Authorization': `Token token=${user.token}`
+      'Authorization': `Bearer ${user.token}`
     },
     data: { post: post }
   })

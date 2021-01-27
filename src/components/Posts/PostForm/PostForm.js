@@ -3,13 +3,14 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 const PostForm = ({ post, handleSubmit, handleChange }) => (
-  <Form>
+  <Form onSubmit={handleSubmit}>
     <Form.Group controlId="formBasicTitle">
       <Form.Label>Title</Form.Label>
       <Form.Control
         type="text"
         name="title"
         placeholder="Enter Title"
+        onChange={handleChange}
       />
     </Form.Group>
 
@@ -19,6 +20,7 @@ const PostForm = ({ post, handleSubmit, handleChange }) => (
         type="text"
         name="author"
         placeholder="Author"
+        onChange={handleChange}
       />
     </Form.Group>
 
@@ -29,6 +31,7 @@ const PostForm = ({ post, handleSubmit, handleChange }) => (
         rows={3}
         name="content"
         placeholder="Content"
+        onChange={handleChange}
       />
     </Form.Group>
 
