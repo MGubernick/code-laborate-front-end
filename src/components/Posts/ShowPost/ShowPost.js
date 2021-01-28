@@ -112,6 +112,8 @@ class PostShow extends Component {
           />
           <ShowComments
             post={post}
+            user={user}
+            msgAlert={msgAlert}
           />
         </div>
       )
