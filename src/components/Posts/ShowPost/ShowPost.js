@@ -61,7 +61,7 @@ class PostShow extends Component {
 
   render () {
     const { post } = this.state
-    const { user } = this.props
+    const { msgAlert, user } = this.props
     // console.log('this is user', user)
     // console.log('this is post', post)
 
@@ -108,6 +108,7 @@ class PostShow extends Component {
           <CreateComment
             user={user}
             post={post}
+            msgAlert={msgAlert}
           />
           <ShowComments
             post={post}

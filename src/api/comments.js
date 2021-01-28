@@ -1,7 +1,8 @@
 import axios from 'axios'
 import apiUrl from '../apiConfig'
 
-export const createComment = (comment, user, postId) => {
+export const createComment = (content, user, postId) => {
+  console.log('this is content in axios', content)
   return axios({
     url: apiUrl + '/comments',
     method: 'POST',
@@ -10,7 +11,7 @@ export const createComment = (comment, user, postId) => {
     },
     data: {
       comment: {
-        content: comment,
+        content: content.content,
         postId: postId
       }
     }
