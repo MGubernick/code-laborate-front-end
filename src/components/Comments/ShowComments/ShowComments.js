@@ -1,19 +1,15 @@
-<<<<<<<
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import UpdateComment from './../UpdateComment/UpdateComment'
 
 import { Redirect } from 'react-router-dom'
->>>>>>>
 // import showComments from '../../../api/comments'
 import { commentDestroy } from '../../../api/comments'
 
 const ShowComments = props => {
-<<<<<<<
   const { post, user } = props
   const [deleted, setDeleted] = useState(false)
   console.log('This is props at show comments', props)
->>>>>>>
   // useEffect(() => {
   //   const { commentId, msgAlerts } = props
   //
@@ -52,7 +48,7 @@ const ShowComments = props => {
     <li
       key={comment._id}>
       {comment.content}
-<<<<<<<
+
       <Button
         variant="primary"
         type="button"
@@ -62,7 +58,6 @@ const ShowComments = props => {
       </Button>
       <button
         onClick={(event) => commentDelete(comment._id, event)}>Delete Comment</button>
->>>>>>>
     </li>
   ))
 

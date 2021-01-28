@@ -19,7 +19,7 @@ export const createComment = (content, user, postId) => {
   })
 }
 
-<<<<<<<
+// Update
 export const updateComment = (content, user, postId, commentId) => {
   return axios({
     url: apiUrl + '/comments/' + commentId,
@@ -32,9 +32,10 @@ export const updateComment = (content, user, postId, commentId) => {
         content: content.content,
         postId: postId
       }
-    })
-  }
-  
+    }
+  })
+}
+
 // Delete
 export const commentDestroy = (commentId, postId, user) => {
   return axios({
@@ -47,7 +48,6 @@ export const commentDestroy = (commentId, postId, user) => {
     },
     headers: {
       'Authorization': `Bearer ${user.token}`
->>>>>>>
     }
   })
 }
