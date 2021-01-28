@@ -15,7 +15,7 @@ class PostIndexAll extends Component {
 
     postIndexAll(user)
       .then(res => {
-        console.log('This is res', res)
+        // console.log('This is res', res)
         this.setState({ posts: res.data.post })
       })
       .then(() => msgAlert({
@@ -37,10 +37,9 @@ class PostIndexAll extends Component {
     if (!posts) {
       return 'Loading...'
     }
+    console.log('this is posts in index all', posts)
 
-    const reversedPosts = posts.reverse()
-
-    const postsJsx = reversedPosts.map(post => (
+    const postsJsx = posts.map(post => (
       <Link to={`/posts/${post._id}`} key={post._id}>
         <li>
           {post.title}
@@ -52,7 +51,7 @@ class PostIndexAll extends Component {
       <div>
         <h3>Welcome</h3>
         <ul>
-          {postsJsx}
+          {postsJsx.reverse()}
         </ul>
       </div>
     )
