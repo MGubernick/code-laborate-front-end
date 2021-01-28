@@ -6,13 +6,12 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 const CreateComment = props => {
-  console.log('this is props', props)
-  const [comment, setComment] = useState({ content: '', owner: '' })
+  const [content, setContent] = useState('')
   const [commentId, setCommentId] = useState(null)
 
   const handleChange = event => {
     event.persist()
-    setComment(prevComment => {
+    setContent(prevComment => {
       const updatedField = { [event.target.name]: event.target.value }
 
       const editComment = Object.assign({}, prevComment, updatedField)
@@ -23,23 +22,28 @@ const CreateComment = props => {
   const handleSubmit = event => {
     event.preventDefault()
 
-    const { user, msgAlert, post } = props
+    const { msgAlert, history, user, post } = props
     const postId = post._id
+    console.log('this is the content before axios: ', content)
+    // console.log('this is post before axios', post)
 
-    createComment(comment, user, postId)
-      .then(res => setCommentId(res.data.comment._id))
+    createComment(content, user, postId)
+      .then(res => setCommentId(res.data.post.comments._id))
       .then(res => msgAlert({
         heading: 'Created comment successfully',
         message: 'Thanks for the help!',
         variant: 'success'
       }))
-      .then(() => history.push(`/posts/${postId}`))
+      // .then(console.log('it worked!'))
       .then(event.target.reset())
+
+      .then(() => history.push(`/posts/${postId}`))
       .catch(error => msgAlert({
         heading: 'Failed to create comment',
         message: `Failed because: ${error.message}`,
         variant: 'danger'
       }))
+      // .catch(console.error)
   }
 
   if (commentId) {
@@ -55,7 +59,7 @@ const CreateComment = props => {
           <Form.Control
             type="textarea"
             rows={3}
-            name="comment"
+            name="content"
             placeholder="comment here"
             onChange={handleChange}
           />

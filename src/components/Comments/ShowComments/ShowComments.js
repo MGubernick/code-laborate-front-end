@@ -18,7 +18,7 @@ const ShowComments = props => {
 
   const commentsJsx = post.comments.map(comment => (
     <li
-      key={comment.id}>
+      key={comment._id}>
       {comment.content}
     </li>
   ))
