@@ -4,7 +4,7 @@ import UpdateComment from './../UpdateComment/UpdateComment'
 // import showComments from '../../../api/comments'
 
 const ShowComments = props => {
-  const { post } = props
+  const { post, user } = props
 
   // useEffect(() => {
   //   const { commentId, msgAlerts } = props
