@@ -17,3 +17,19 @@ export const createComment = (content, user, postId) => {
     }
   })
 }
+
+export const updateComment = (content, user, postId, commentId) => {
+  return axios({
+    url: apiUrl + '/comments/' + commentId,
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${user.token}`
+    },
+    data: {
+      comment: {
+        content: content.content,
+        postId: postId
+      }
+    }
+  })
+}

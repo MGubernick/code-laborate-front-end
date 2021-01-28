@@ -1,4 +1,6 @@
 import React from 'react'
+import Button from 'react-bootstrap/Button'
+import UpdateComment from './../UpdateComment/UpdateComment'
 // import showComments from '../../../api/comments'
 
 const ShowComments = props => {
@@ -20,6 +22,13 @@ const ShowComments = props => {
     <li
       key={comment._id}>
       {comment.content}
+      <Button
+        variant="primary"
+        type="button"
+        href="#update-comment/:id"
+      >
+        <UpdateComment msgAlert={this.msgAlert} user={user} />
+      </Button>
     </li>
   ))
 
