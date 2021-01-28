@@ -26,7 +26,7 @@ const CreateComment = props => {
     const { user, msgAlert, post } = props
     const postId = post._id
 
-    createComment(comment, user)
+    createComment(comment, user, postId)
       .then(res => setCommentId(res.data.comment._id))
       .then(res => msgAlert({
         heading: 'Created comment successfully',

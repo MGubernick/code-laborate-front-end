@@ -5,6 +5,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { showPost, postDelete } from '../../../api/posts'
 
 import CreateComment from './../../Comments/CreateComment/CreateComment'
+import ShowComments from './../../Comments/ShowComments/ShowComments'
 
 class PostShow extends Component {
   constructor (props) {
@@ -108,9 +109,9 @@ class PostShow extends Component {
             user={user}
             post={post}
           />
-          <ul>
-            <li>This will be a comment.</li>
-          </ul>
+          <ShowComments
+            post={post}
+          />
         </div>
       )
     }
