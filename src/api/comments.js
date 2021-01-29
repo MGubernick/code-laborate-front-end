@@ -3,7 +3,6 @@ import apiUrl from '../apiConfig'
 
 // Create
 export const createComment = (content, user, postId) => {
-  console.log('this is content in axios', content)
   return axios({
     url: apiUrl + '/comments',
     method: 'POST',

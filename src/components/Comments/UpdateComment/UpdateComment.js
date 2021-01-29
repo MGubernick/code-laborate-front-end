@@ -23,9 +23,9 @@ const UpdateComment = props => {
   const handleSubmit = event => {
     event.preventDefault()
 
-    const { msgAlert, history, user, post, comment } = props
-    const postId = post._id
-    const commentId = comment._id
+    const { msgAlert, history, user, match } = props
+    const postId = event.target.postId
+    const commentId = match.params._id
 
     updateComment(content, user, postId, commentId)
       .then(setUpdated)
