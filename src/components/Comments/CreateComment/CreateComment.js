@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from 'react'
 import { withRouter } from 'react-router-dom'
 import { createComment } from '../../../api/comments'
+// import { showPost } from '../../../api/posts'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -22,7 +23,7 @@ const CreateComment = props => {
   const handleSubmit = event => {
     event.preventDefault()
 
-    const { msgAlert, history, user, post } = props
+    const { msgAlert, user, post } = props
     const postId = post._id
     console.log('this is the content before axios: ', content)
     // console.log('this is post before axios', post)
@@ -37,7 +38,8 @@ const CreateComment = props => {
       // .then(console.log('it worked!'))
       .then(event.target.reset())
 
-      .then(() => history.push(`/posts/${postId}`))
+      // .then(() => history.push(`/posts/${postId}`))
+      // .then(console.log('this is history!:', history))
       .catch(error => msgAlert({
         heading: 'Failed to create comment',
         message: `Failed because: ${error.message}`,
@@ -49,6 +51,10 @@ const CreateComment = props => {
   if (commentId) {
   //   return <Redirect to={`/posts/${postId}`} />
   }
+
+  // useEffect(() => {
+  //   console.log('comments array has changed!')
+  // }, [props.post.comments])
 
   return (
     <Fragment>
