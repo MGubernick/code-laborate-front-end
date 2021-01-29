@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { showPost, postDelete } from '../../../api/posts'
 
 import CreateComment from './../../Comments/CreateComment/CreateComment'
-import ShowComments from './../../Comments/ShowComments/ShowComments'
+// import ShowComments from './../../Comments/ShowComments/ShowComments'
 
 class PostShow extends Component {
   constructor (props) {
@@ -13,8 +13,22 @@ class PostShow extends Component {
 
     this.state = {
       post: null,
-      exists: true
+      exists: true,
+      commentsList: null
     }
+  }
+
+  deleteComment = (id) => {
+    this.setState((state) => {
+      return { commentsList: state.commentsList.filter(cmnt => cmnt.id !== id) }
+    })
+  }
+
+  addNewComment = (comment) => {
+    console.log('this is comment: ', comment)
+    this.setState((state) => {
+      return { commentsList: [...state.commentsList, { comment }] }
+    })
   }
 
   onPostDelete = () => {
@@ -41,8 +55,7 @@ class PostShow extends Component {
 
     showPost(match.params.id, user)
       .then(res => {
-        // console.log('this is res: ', res)
-        this.setState({ post: res.data.post })
+        this.setState({ post: res.data.post, commentsList: res.data.post.comments })
         return res
       })
       .then(res => msgAlert({
@@ -60,14 +73,8 @@ class PostShow extends Component {
   }
 
   render () {
-    const { post } = this.state
+    const { post, commentsList } = this.state
     const { msgAlert, user } = this.props
-    // console.log('this is user', user)
-    // console.log('this is post', post)
-
-    // if (!exists) {
-    //   return <Redirect to={'/index'} />
-    // }
 
     if (!post) {
       return 'Loading...'
@@ -81,18 +88,71 @@ class PostShow extends Component {
     let showDisplay
 
     if (userId !== ownerId) {
+      const commentsJsx = commentsList.map(comment => (
+        <li
+          key={comment._id}>
+          {comment.content}
+
+          <button
+            variant="primary"
+            type="button"
+            // onClick={(event) => handleUpdateClicked(comment._id, event)}
+          >
+            Update
+          </button>
+          <button
+            // onClick={(event) => commentDelete(comment._id, event)}>Delete Comment}
+          >
+          </button>
+        </li>
+      ))
       showDisplay = (
         <div>
           <h3>{post.title}</h3>
           <h5>Author: {post.author}</h5>
           <h6>{post.content}</h6>
           <h5>Comments:</h5>
-          <ul>
-            <li>This will be a comment.</li>
-          </ul>
+          <CreateComment
+            user={user}
+            post={post}
+            msgAlert={msgAlert}
+            addNewComment={this.addNewComment}
+          />
+          {/* <ShowComments
+            post={post}
+            user={user}
+            msgAlert={msgAlert}
+            addNewComment={this.addNewComment}
+            commentsList={commentsList}
+          /> */}
+          <div className="showCommentContainer">
+            <ul>
+              {commentsJsx}
+            </ul>
+          </div>
         </div>
       )
-    } else {
+    } else if (commentsList !== null) {
+      console.log('commentsList if not set yet', commentsList)
+      const commentsJsx = commentsList.map(comment => (
+        <li
+          key={comment._id}>
+          {comment.content}
+
+          <button
+            variant="primary"
+            type="button"
+            // onClick={(event) => handleUpdateClicked(comment._id, event)}
+          >
+            Update
+          </button>
+          <button
+            // onClick={(event) => commentDelete(comment._id, event)}>Delete Comment}
+          >
+          </button>
+        </li>
+      ))
+
       showDisplay = (
         <div>
           <button onClick={this.onPostDelete}>Delete</button>
@@ -109,12 +169,20 @@ class PostShow extends Component {
             user={user}
             post={post}
             msgAlert={msgAlert}
+            addNewComment={this.addNewComment}
           />
-          <ShowComments
+          {/* <ShowComments
             post={post}
             user={user}
             msgAlert={msgAlert}
-          />
+            addNewComment={this.addNewComment}
+            commentsList={commentsList}
+          /> */}
+          <div className="showCommentContainer">
+            <ul>
+              {commentsJsx}
+            </ul>
+          </div>
         </div>
       )
     }

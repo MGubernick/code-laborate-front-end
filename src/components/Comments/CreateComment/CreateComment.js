@@ -1,14 +1,13 @@
 import React, { useState, Fragment } from 'react'
 import { withRouter } from 'react-router-dom'
 import { createComment } from '../../../api/comments'
-// import { showPost } from '../../../api/posts'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 const CreateComment = props => {
   const [content, setContent] = useState('')
-  const [commentId, setCommentId] = useState(null)
+  // const [commentId, setCommentId] = useState(null)
 
   const handleChange = event => {
     event.persist()
@@ -23,38 +22,30 @@ const CreateComment = props => {
   const handleSubmit = event => {
     event.preventDefault()
 
-    const { msgAlert, user, post } = props
+    const { msgAlert, user, post, addNewComment } = props
     const postId = post._id
-    console.log('this is the content before axios: ', content)
-    // console.log('this is post before axios', post)
 
+    // calling axios to POST new comment
+    // sending it content, user(for token), and id of post we want to add comment to
     createComment(content, user, postId)
-      .then(res => setCommentId(res.data.post.comments._id))
-      .then(res => msgAlert({
+      .then(res => {
+        console.log('this is res: ', res)
+        return addNewComment({
+          content,
+          _id: res.data.newComment._id })
+      })
+      .then(msgAlert({
         heading: 'Created comment successfully',
         message: 'Thanks for the help!',
         variant: 'success'
       }))
-      // .then(console.log('it worked!'))
       .then(event.target.reset())
-
-      // .then(() => history.push(`/posts/${postId}`))
-      // .then(console.log('this is history!:', history))
       .catch(error => msgAlert({
         heading: 'Failed to create comment',
         message: `Failed because: ${error.message}`,
         variant: 'danger'
       }))
-      // .catch(console.error)
   }
-
-  if (commentId) {
-  //   return <Redirect to={`/posts/${postId}`} />
-  }
-
-  // useEffect(() => {
-  //   console.log('comments array has changed!')
-  // }, [props.post.comments])
 
   return (
     <Fragment>

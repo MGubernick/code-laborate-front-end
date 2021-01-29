@@ -11,6 +11,7 @@ const ShowComments = props => {
   const [deleted, setDeleted] = useState(false)
   const [updateClicked, setUpdateClicked] = useState(false)
   const [commentId, setCommentId] = useState(null)
+  const [commentsList] = useState(post.comments)
 
   // useEffect(() => {
   // }, [])
@@ -61,7 +62,7 @@ const ShowComments = props => {
       }))
   }
 
-  const commentsJsx = post.comments.map(comment => (
+  const commentsJsx = commentsList.map(comment => (
     <li
       key={comment._id}>
       {comment.content}
