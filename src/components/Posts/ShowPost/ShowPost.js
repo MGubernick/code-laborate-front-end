@@ -25,6 +25,21 @@ class PostShow extends Component {
     }
   }
 
+  // ////////////////
+
+  updateComment = (content, id, event) => {
+    // this.state.commentsList.find(cmt => cmt._id === id)
+    const foundIndex = this.state.commentsList.findIndex(comment => comment._id === id)
+    console.log('this is foundIndex', foundIndex)
+
+    this.commentsList[foundIndex].content = { content, id }
+    this.setState((state) => {
+      return { commentsList: this.commentsList[foundIndex].content }
+    })
+  }
+
+  // ////////////////
+
   deleteComment = (id, event) => {
     console.log('This is the id', id)
     this.setState((state) => {
@@ -53,17 +68,17 @@ class PostShow extends Component {
   }
 
   handleUpdateClicked = (commentId, event) => {
-    this.setState({ updateCommentClicked: (this.updateCommentClicked ? 'true' : 'false') })
+    // this.setState({ updateCommentClicked: (this.updateCommentClicked ? 'true' : 'false') })
+    this.setState({ updateCommentClicked: true })
     this.setState({ commentId: commentId })
   }
 
   handleUpdate = (commentIdForAxios, event) => {
     event.preventDefault()
     const { msgAlert, user } = this.props
-    const { post } = this.state
+    const { post, commentId, content } = this.state
     const postId = post._id
 
-    const content = this.state.content
     console.log('This is content', content)
     updateComment(content, user, postId, commentIdForAxios)
       .then(() => msgAlert({
@@ -71,7 +86,8 @@ class PostShow extends Component {
         message: 'Your comment has been updated',
         variant: 'success'
       }))
-      // .then(() => history.push(`/posts/${postId}`))
+      .then(this.updateComment(content, commentId))
+      .then(this.setState({ updateCommentClicked: false }))
       .catch(error => msgAlert({
         heading: 'Failed to update comment',
         message: `Failed to update with error: ${error.message}`,
@@ -144,7 +160,7 @@ class PostShow extends Component {
 
     let showDisplay
 
-    if (userId !== ownerId) {
+    if (!updateCommentClicked && userId !== ownerId) {
       const commentsJsx = commentsList.map(comment => (
         <li
           key={comment._id}>
@@ -213,33 +229,6 @@ class PostShow extends Component {
         </li>
       ))
 
-      if (updateCommentClicked) {
-        return (
-          <div>
-            <Form onSubmit={event => this.handleUpdate(commentId, event)} >
-              <Form.Group controlId="formBasicContent">
-                <Form.Label>Comment</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  name="content"
-                  placeholder="Update comment here"
-                  onChange={this.handleChange}
-                />
-              </Form.Group>
-
-              <Button
-                variant="primary"
-                type="submit"
-                handleUpdateClicked={this.handleUpdateClicked}
-              >
-                Submit
-              </Button>
-            </Form>
-          </div>
-        )
-      }
-
       showDisplay = (
         <div>
           <button onClick={this.onPostDelete}>Delete</button>
@@ -270,6 +259,35 @@ class PostShow extends Component {
               {commentsJsx}
             </ul>
           </div>
+        </div>
+      )
+    }
+
+    if (updateCommentClicked) {
+      return (
+        <div>
+          <Form onSubmit={(event) => {
+            this.handleUpdate(commentId, event)
+            this.updateComment(commentId, event)
+          }}>
+            <Form.Group controlId="formBasicContent">
+              <Form.Label>Comment</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                name="content"
+                placeholder="Update comment here"
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+
+            <Button
+              variant="primary"
+              type="submit"
+            >
+              Submit
+            </Button>
+          </Form>
         </div>
       )
     }
