@@ -37,7 +37,6 @@ class PostIndexAll extends Component {
     if (!posts) {
       return 'Loading...'
     }
-    console.log('this is posts in index all', posts)
 
     const postsJsx = posts.map(post => (
       <Link to={`/posts/${post._id}`} key={post._id}>

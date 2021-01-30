@@ -2,7 +2,7 @@ import axios from 'axios'
 import apiUrl from '../apiConfig'
 
 // Create
-export const createComment = (content, user, postId) => {
+export const createComment = async (content, user, postId) => {
   return axios({
     url: apiUrl + '/comments',
     method: 'POST',
