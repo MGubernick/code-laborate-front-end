@@ -3,7 +3,9 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 
 import { showPost, postDelete } from '../../../api/posts'
-import { commentDestroy } from '../../../api/comments'
+import { commentDestroy, updateComment } from '../../../api/comments'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 import CreateComment from './../../Comments/CreateComment/CreateComment'
 // import ShowComments from './../../Comments/ShowComments/ShowComments'
@@ -16,6 +18,9 @@ class PostShow extends Component {
       post: null,
       exists: true,
       deleted: false,
+      updateCommentClicked: false,
+      commentId: null,
+      content: null,
       commentsList: []
     }
   }
@@ -45,6 +50,42 @@ class PostShow extends Component {
         message: `Couldn't Delete Because: ${error.message}`,
         variant: 'danger'
       }))
+  }
+
+  handleUpdateClicked = (commentId, event) => {
+    this.setState({ updateCommentClicked: (this.updateCommentClicked ? 'true' : 'false') })
+    this.setState({ commentId: commentId })
+  }
+
+  handleUpdate = (commentIdForAxios, event) => {
+    event.preventDefault()
+    const { msgAlert, user } = this.props
+    const { post } = this.state
+    const postId = post._id
+
+    const content = this.state.content
+    console.log('This is content', content)
+    updateComment(content, user, postId, commentIdForAxios)
+      .then(() => msgAlert({
+        heading: 'Updated comment successfully',
+        message: 'Your comment has been updated',
+        variant: 'success'
+      }))
+      // .then(() => history.push(`/posts/${postId}`))
+      .catch(error => msgAlert({
+        heading: 'Failed to update comment',
+        message: `Failed to update with error: ${error.message}`,
+        variant: 'danger'
+      }))
+  }
+
+  handleChange = event => {
+    event.persist()
+    this.setState((state) => {
+      return {
+        content: { ...state.content, [event.target.name]: event.target.value }
+      }
+    })
   }
 
   onPostDelete = () => {
@@ -89,7 +130,7 @@ class PostShow extends Component {
   }
 
   render () {
-    const { post, commentsList } = this.state
+    const { post, commentsList, commentId, updateCommentClicked } = this.state
     const { msgAlert, user } = this.props
 
     if (!post) {
@@ -112,7 +153,7 @@ class PostShow extends Component {
           <button
             variant="primary"
             type="button"
-            // onClick={(event) => handleUpdateClicked(comment._id, event)}
+            onClick={(event) => this.handleUpdateClicked(comment._id, event)}
           >
             Update
           </button>
@@ -124,6 +165,7 @@ class PostShow extends Component {
         </li>
       )
       )
+
       showDisplay = (
         <div>
           <h3>{post.title}</h3>
@@ -150,7 +192,7 @@ class PostShow extends Component {
           </div>
         </div>
       )
-    } else if (commentsList !== null) {
+    } else if (!updateCommentClicked && commentsList !== null) {
       const commentsJsx = commentsList.map(comment => (
         <li
           key={comment._id}>
@@ -159,7 +201,7 @@ class PostShow extends Component {
           <button
             variant="primary"
             type="button"
-            // onClick={(event) => handleUpdateClicked(comment._id, event)}
+            onClick={(event) => this.handleUpdateClicked(comment._id, event)}
           >
             Update
           </button>
@@ -170,6 +212,33 @@ class PostShow extends Component {
             }}>Delete Comment</button>
         </li>
       ))
+
+      if (updateCommentClicked) {
+        return (
+          <div>
+            <Form onSubmit={event => this.handleUpdate(commentId, event)} >
+              <Form.Group controlId="formBasicContent">
+                <Form.Label>Comment</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  name="content"
+                  placeholder="Update comment here"
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
+
+              <Button
+                variant="primary"
+                type="submit"
+                handleUpdateClicked={this.handleUpdateClicked}
+              >
+                Submit
+              </Button>
+            </Form>
+          </div>
+        )
+      }
 
       showDisplay = (
         <div>
