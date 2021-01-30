@@ -7,7 +7,6 @@ import Button from 'react-bootstrap/Button'
 
 const CreateComment = props => {
   const [content, setContent] = useState('')
-  // const [commentId, setCommentId] = useState(null)
 
   const handleChange = event => {
     event.persist()
@@ -19,32 +18,30 @@ const CreateComment = props => {
     })
   }
 
-  const handleSubmit = event => {
+  async function handleSubmit (event) {
     event.preventDefault()
+    event.target.reset()
 
     const { msgAlert, user, post, addNewComment } = props
     const postId = post._id
 
     // calling axios to POST new comment
     // sending it content, user(for token), and id of post we want to add comment to
-    createComment(content, user, postId)
-      .then(res => {
-        console.log('this is res: ', res)
-        return addNewComment({
-          content,
-          _id: res.data.newComment._id })
-      })
-      .then(msgAlert({
+    try {
+      const res = await createComment(content, user, postId)
+      await addNewComment(res.data.newComment)
+      msgAlert({
         heading: 'Created comment successfully',
         message: 'Thanks for the help!',
         variant: 'success'
-      }))
-      .then(event.target.reset())
-      .catch(error => msgAlert({
+      })
+    } catch (error) {
+      msgAlert({
         heading: 'Failed to create comment',
         message: `Failed because: ${error.message}`,
         variant: 'danger'
-      }))
+      })
+    }
   }
 
   return (

@@ -14,7 +14,7 @@ class PostShow extends Component {
     this.state = {
       post: null,
       exists: true,
-      commentsList: null
+      commentsList: []
     }
   }
 
@@ -25,9 +25,8 @@ class PostShow extends Component {
   }
 
   addNewComment = (comment) => {
-    console.log('this is comment: ', comment)
     this.setState((state) => {
-      return { commentsList: [...state.commentsList, { comment }] }
+      return { commentsList: [...state.commentsList, { content: comment.content, _id: comment._id }] }
     })
   }
 
@@ -91,7 +90,7 @@ class PostShow extends Component {
       const commentsJsx = commentsList.map(comment => (
         <li
           key={comment._id}>
-          {comment.content}
+          {comment.content.content}
 
           <button
             variant="primary"
@@ -105,7 +104,8 @@ class PostShow extends Component {
           >
           </button>
         </li>
-      ))
+      )
+      )
       showDisplay = (
         <div>
           <h3>{post.title}</h3>
@@ -133,7 +133,6 @@ class PostShow extends Component {
         </div>
       )
     } else if (commentsList !== null) {
-      console.log('commentsList if not set yet', commentsList)
       const commentsJsx = commentsList.map(comment => (
         <li
           key={comment._id}>
