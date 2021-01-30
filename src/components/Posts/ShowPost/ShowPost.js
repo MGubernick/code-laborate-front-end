@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 
 import { showPost, postDelete } from '../../../api/posts'
+import { commentDestroy } from '../../../api/comments'
 
 import CreateComment from './../../Comments/CreateComment/CreateComment'
 // import ShowComments from './../../Comments/ShowComments/ShowComments'
@@ -14,13 +15,15 @@ class PostShow extends Component {
     this.state = {
       post: null,
       exists: true,
+      deleted: false,
       commentsList: []
     }
   }
 
-  deleteComment = (id) => {
+  deleteComment = (id, event) => {
+    console.log('This is the id', id)
     this.setState((state) => {
-      return { commentsList: state.commentsList.filter(cmnt => cmnt.id !== id) }
+      return { commentsList: state.commentsList.filter(cmnt => cmnt._id !== id) }
     })
   }
 
@@ -28,6 +31,20 @@ class PostShow extends Component {
     this.setState((state) => {
       return { commentsList: [...state.commentsList, { content: comment.content, _id: comment._id }] }
     })
+  }
+
+  commentDelete = (commentId, event) => {
+    const { user, msgAlert } = this.props
+    const { post } = this.state
+    const postId = post._id
+    commentDestroy(commentId, postId, user)
+      .then(res => this.setState({ deleted: true }))
+      // .then(() => history.push('/index-user'))
+      .catch(error => msgAlert({
+        heading: 'Comment Delete Failed',
+        message: `Couldn't Delete Because: ${error.message}`,
+        variant: 'danger'
+      }))
   }
 
   onPostDelete = () => {
@@ -100,9 +117,10 @@ class PostShow extends Component {
             Update
           </button>
           <button
-            // onClick={(event) => commentDelete(comment._id, event)}>Delete Comment}
-          >
-          </button>
+            onClick={(event) => {
+              this.commentDelete(comment._id, event)
+              this.deleteComment(comment._id, event)
+            }}>Delete Comment</button>
         </li>
       )
       )
@@ -146,9 +164,10 @@ class PostShow extends Component {
             Update
           </button>
           <button
-            // onClick={(event) => commentDelete(comment._id, event)}>Delete Comment}
-          >
-          </button>
+            onClick={(event) => {
+              this.commentDelete(comment._id, event)
+              this.deleteComment(comment._id, event)
+            }}>Delete Comment</button>
         </li>
       ))
 
