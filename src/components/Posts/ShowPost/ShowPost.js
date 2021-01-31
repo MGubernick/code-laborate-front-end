@@ -29,6 +29,7 @@ class PostShow extends Component {
 
   updateCommentsList = (content, commentId) => {
     const { commentsList, post } = this.state
+    const { user, match } = this.props
     // console.log('this is event', event)
     // this.state.commentsList.find(cmt => cmt._id === id)
     const foundIndex = commentsList.findIndex(comment => comment._id === commentId)
@@ -44,6 +45,11 @@ class PostShow extends Component {
         currentComment = { commentsList: [ { ...currentComment, ...{ content: content.content, _id: commentId } } ] }
       )
     })
+    showPost(match.params.id, user)
+      .then(res => {
+        this.setState({ post: res.data.post, commentsList: res.data.post.comments })
+        return res
+      })
     console.log('this is now post.comments after update:', post.comments)
   }
 
