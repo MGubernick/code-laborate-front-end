@@ -19,7 +19,7 @@ export const createComment = async (content, user, postId) => {
 }
 
 // Update
-export const updateComment = (content, user, postId, commentId) => {
+export const updateComment = async (content, user, postId, commentId) => {
   return axios({
     url: apiUrl + '/comments/' + commentId,
     method: 'PATCH',

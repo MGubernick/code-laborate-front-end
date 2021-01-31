@@ -27,21 +27,36 @@ class PostShow extends Component {
 
   // ////////////////
 
-  updateComment = (content, id, event) => {
+  updateCommentsList = (content, commentId) => {
+    const { commentsList, post } = this.state
+    const { user, match } = this.props
+    // console.log('this is event', event)
     // this.state.commentsList.find(cmt => cmt._id === id)
-    const foundIndex = this.state.commentsList.findIndex(comment => comment._id === id)
-    console.log('this is foundIndex', foundIndex)
+    const foundIndex = commentsList.findIndex(comment => comment._id === commentId)
+    // console.log('this is foundIndex', foundIndex)
+    // console.log('this is content coming into updateComment', content)
+    // console.log('this is commentId coming into updateComment', commentId)
+    //
 
-    this.commentsList[foundIndex].content = { content, id }
     this.setState((state) => {
-      return { commentsList: this.commentsList[foundIndex].content }
+      let currentComment = state.commentsList[foundIndex]
+      // console.log('this is currentComment before return', currentComment)
+      return (
+        currentComment = { commentsList: [ { ...currentComment, ...{ content: content.content, _id: commentId } } ] }
+      )
     })
+    showPost(match.params.id, user)
+      .then(res => {
+        this.setState({ post: res.data.post, commentsList: res.data.post.comments })
+        return res
+      })
+    console.log('this is now post.comments after update:', post.comments)
   }
 
   // ////////////////
 
   deleteComment = (id, event) => {
-    console.log('This is the id', id)
+    // console.log('This is the id', id)
     this.setState((state) => {
       return { commentsList: state.commentsList.filter(cmnt => cmnt._id !== id) }
     })
@@ -73,26 +88,31 @@ class PostShow extends Component {
     this.setState({ commentId: commentId })
   }
 
-  handleUpdate = (commentIdForAxios, event) => {
+  async handleUpdate (commentIdForAxios, event) {
     event.preventDefault()
+    event.target.reset()
+
     const { msgAlert, user } = this.props
     const { post, commentId, content } = this.state
     const postId = post._id
-
-    console.log('This is content', content)
-    updateComment(content, user, postId, commentIdForAxios)
-      .then(() => msgAlert({
+    // console.log('this is commentIdForAxios', commentIdForAxios)
+    try {
+      await updateComment(content, user, postId, commentIdForAxios)
+      await console.log('here is content that will be sent to updateCommentsList:', content)
+      await this.updateCommentsList(content, commentId)
+      this.setState({ updateCommentClicked: false })
+      msgAlert({
         heading: 'Updated comment successfully',
         message: 'Your comment has been updated',
         variant: 'success'
-      }))
-      .then(this.updateComment(content, commentId))
-      .then(this.setState({ updateCommentClicked: false }))
-      .catch(error => msgAlert({
+      })
+    } catch (error) {
+      msgAlert({
         heading: 'Failed to update comment',
         message: `Failed to update with error: ${error.message}`,
         variant: 'danger'
-      }))
+      })
+    }
   }
 
   handleChange = event => {
@@ -223,8 +243,8 @@ class PostShow extends Component {
           </button>
           <button
             onClick={(event) => {
-              this.commentDelete(comment._id, event)
-              this.deleteComment(comment._id, event)
+              this.commentDelete(comment._id, event.target)
+              this.deleteComment(comment._id, event.target)
             }}>Delete Comment</button>
         </li>
       ))
@@ -268,7 +288,6 @@ class PostShow extends Component {
         <div>
           <Form onSubmit={(event) => {
             this.handleUpdate(commentId, event)
-            this.updateComment(commentId, event)
           }}>
             <Form.Group controlId="formBasicContent">
               <Form.Label>Comment</Form.Label>
