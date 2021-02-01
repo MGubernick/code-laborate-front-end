@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
+import Card from 'react-bootstrap/Card'
+
 import { postIndexAll } from './../../../api/posts'
 
 class PostIndexAll extends Component {
@@ -33,18 +35,21 @@ class PostIndexAll extends Component {
   }
 
   render () {
+    console.log('this is posts: ', this.state.posts)
     const { posts } = this.state
     if (!posts) {
       return 'Loading...'
     }
-    console.log('this is posts in index all', posts)
 
     const postsJsx = posts.map(post => (
-      <Link to={`/posts/${post._id}`} key={post._id}>
-        <li>
-          {post.title}
-        </li>
-      </Link>
+      <Card key={post._id} style={{ width: '100%', marginTop: '10px' }}>
+        <Card.Body>
+          <Card.Title>{post.title}</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">{post.owner.email}</Card.Subtitle>
+          <Card.Text>{post.content}</Card.Text>
+          <Card.Link href={`#posts/${post._id}`}>See Full Post</Card.Link>
+        </Card.Body>
+      </Card>
     ))
 
     return (

@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
+
+import Card from 'react-bootstrap/Card'
+
 import { postIndexUser } from './../../../api/posts'
 
 class PostIndexUser extends Component {
@@ -39,11 +42,14 @@ class PostIndexUser extends Component {
       return 'Loading...'
     }
     const postsJsx = posts.map(post => (
-      <Link to={`/posts/${post._id}`} key={post._id}>
-        <li>
-          {post.title}
-        </li>
-      </Link>
+      <Card key={post._id} style={{ width: '100%' }}>
+        <Card.Body>
+          <Card.Title>{post.title}</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">{post.owner.email}</Card.Subtitle>
+          <Card.Text>{post.content}</Card.Text>
+          <Card.Link href={`#posts/${post._id}`}>See Full Post</Card.Link>
+        </Card.Body>
+      </Card>
     ))
 
     return (

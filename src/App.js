@@ -18,6 +18,7 @@ import PostShow from './components/Posts/ShowPost/ShowPost'
 import UpdatePost from './components/Posts/UpdatePost/UpdatePost'
 
 // import comment components
+// import UpdateComment from './components/Comments/UpdateComment/UpdateComment'
 
 class App extends Component {
   constructor (props) {
@@ -89,6 +90,9 @@ class App extends Component {
           <AuthenticatedRoute user={user} path='/update-post/:id' render={() => (
             <UpdatePost msgAlert={this.msgAlert} user={user} />
           )} />
+          {/* <AuthenticatedRoute user={user} path='/update-comment/:id' render={() => (
+            <UpdateComment msgAlert={this.msgAlert} user={user} />
+          )} /> */}
         </main>
       </Fragment>
     )

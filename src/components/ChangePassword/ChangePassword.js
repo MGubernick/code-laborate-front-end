@@ -6,6 +6,7 @@ import messages from '../AutoDismissAlert/messages'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
 
 class ChangePassword extends Component {
   constructor (props) {
@@ -13,8 +14,16 @@ class ChangePassword extends Component {
 
     this.state = {
       oldPassword: '',
-      newPassword: ''
+      newPassword: '',
+      showChangePwModal: true
     }
+  }
+
+  handleCloseChangePwModal = (event) => {
+    const { history } = this.props
+    this.setState({ showChangePwModal: false })
+    this.setState({ backToIndex: true })
+    history.push('/index')
   }
 
   handleChange = event => this.setState({
@@ -32,7 +41,7 @@ class ChangePassword extends Component {
         message: messages.changePasswordSuccess,
         variant: 'success'
       }))
-      .then(() => history.push('/'))
+      .then(() => history.push('/index'))
       .catch(error => {
         this.setState({ oldPassword: '', newPassword: '' })
         msgAlert({
@@ -43,43 +52,63 @@ class ChangePassword extends Component {
       })
   }
 
+  // if (backToIndex) {
+  //   return (
+  //     <Redirect to={'/index'} />
+  //   )
+  // }
+
   render () {
-    const { oldPassword, newPassword } = this.state
+    const { oldPassword, newPassword, showChangePwModal } = this.state
 
     return (
       <div className="row">
         <div className="col-sm-10 col-md-8 mx-auto mt-5">
-          <h3>Change Password</h3>
-          <Form onSubmit={this.onChangePassword}>
-            <Form.Group controlId="oldPassword">
-              <Form.Label>Old password</Form.Label>
-              <Form.Control
-                required
-                name="oldPassword"
-                value={oldPassword}
-                type="password"
-                placeholder="Old Password"
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-            <Form.Group controlId="newPassword">
-              <Form.Label>New Password</Form.Label>
-              <Form.Control
-                required
-                name="newPassword"
-                value={newPassword}
-                type="password"
-                placeholder="New Password"
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-            <Button
-              variant="primary"
-              type="submit"
-            >
-              Submit
-            </Button>
-          </Form>
+          <Modal
+            show={showChangePwModal}
+            onHide={this.handleCloseChangePwModal}
+            backdrop="static"
+            keyboard={false}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Want To Change Your Password?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form onSubmit={this.onChangePassword}>
+                <Form.Group controlId="oldPassword">
+                  <Form.Label>Old password</Form.Label>
+                  <Form.Control
+                    required
+                    name="oldPassword"
+                    value={oldPassword}
+                    type="password"
+                    placeholder="Old Password"
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
+                <Form.Group controlId="newPassword">
+                  <Form.Label>New Password</Form.Label>
+                  <Form.Control
+                    required
+                    name="newPassword"
+                    value={newPassword}
+                    type="password"
+                    placeholder="New Password"
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
+                <Button variant="secondary" onClick={this.handleCloseChangePwModal}>
+                  Close
+                </Button>
+                <Button
+                  variant="primary"
+                  type="submit"
+                >
+                  Submit
+                </Button>
+              </Form>
+            </Modal.Body>
+          </Modal>
         </div>
       </div>
     )
