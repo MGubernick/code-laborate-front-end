@@ -63,7 +63,6 @@ class CreatePost extends Component {
 
     return (
       <div>
-        <h3>Create Post</h3>
         <PostForm
           post={post}
           handleChange={this.handleChange}

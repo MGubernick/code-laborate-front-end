@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 
 import { Link, withRouter } from 'react-router-dom'
+// import { Redirect, Link, withRouter } from 'react-router-dom'
 
 import { showPost, postDelete } from '../../../api/posts'
 import { commentDestroy, updateComment } from '../../../api/comments'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
 
 import CreateComment from './../../Comments/CreateComment/CreateComment'
 // import ShowComments from './../../Comments/ShowComments/ShowComments'
@@ -19,24 +21,18 @@ class PostShow extends Component {
       exists: true,
       deleted: false,
       updateCommentClicked: false,
+      showUpdateCommentModal: false,
       commentId: null,
       content: null,
       commentsList: []
     }
   }
 
-  // ////////////////
-
   updateCommentsList = (content, commentId) => {
-    const { commentsList, post } = this.state
+    const { commentsList } = this.state
     const { user, match } = this.props
-    // console.log('this is event', event)
-    // this.state.commentsList.find(cmt => cmt._id === id)
+
     const foundIndex = commentsList.findIndex(comment => comment._id === commentId)
-    // console.log('this is foundIndex', foundIndex)
-    // console.log('this is content coming into updateComment', content)
-    // console.log('this is commentId coming into updateComment', commentId)
-    //
 
     this.setState((state) => {
       let currentComment = state.commentsList[foundIndex]
@@ -50,10 +46,7 @@ class PostShow extends Component {
         this.setState({ post: res.data.post, commentsList: res.data.post.comments })
         return res
       })
-    console.log('this is now post.comments after update:', post.comments)
   }
-
-  // ////////////////
 
   deleteComment = (id, event) => {
     // console.log('This is the id', id)
@@ -68,25 +61,43 @@ class PostShow extends Component {
     })
   }
 
-  commentDelete = (commentId, event) => {
+  async commentDelete (commentId, event) {
     const { user, msgAlert } = this.props
     const { post } = this.state
     const postId = post._id
-    commentDestroy(commentId, postId, user)
-      .then(res => this.setState({ deleted: true }))
+
+    try {
+      await commentDestroy(commentId, postId, user)
+      await this.deleteComment(commentId, event)
+      this.setState({ deleted: true })
       // .then(() => history.push('/index-user'))
-      .catch(error => msgAlert({
+    } catch (error) {
+      msgAlert({
         heading: 'Comment Delete Failed',
         message: `Couldn't Delete Because: ${error.message}`,
         variant: 'danger'
-      }))
+      })
+    }
   }
 
   handleUpdateClicked = (commentId, event) => {
     // this.setState({ updateCommentClicked: (this.updateCommentClicked ? 'true' : 'false') })
     this.setState({ updateCommentClicked: true })
     this.setState({ commentId: commentId })
+    this.setState({ showUpdateCommentModal: true })
   }
+
+  handleClose = (event) => {
+    this.setState({ showUpdateCommentModal: false })
+    this.setState({ updateCommentClicked: false })
+    // this.setState({ backToPost: true })
+  }
+
+  // if (backToPost) {
+  //   return (
+  //     <Redirect to={`/post/${this.post._id}`} />
+  //   )
+  // }
 
   async handleUpdate (commentIdForAxios, event) {
     event.preventDefault()
@@ -98,9 +109,10 @@ class PostShow extends Component {
     // console.log('this is commentIdForAxios', commentIdForAxios)
     try {
       await updateComment(content, user, postId, commentIdForAxios)
-      await console.log('here is content that will be sent to updateCommentsList:', content)
+      // await console.log('here is content that will be sent to updateCommentsList:', content)
       await this.updateCommentsList(content, commentId)
       this.setState({ updateCommentClicked: false })
+      this.setState({ showUpdateCommentModal: false })
       msgAlert({
         heading: 'Updated comment successfully',
         message: 'Your comment has been updated',
@@ -166,7 +178,7 @@ class PostShow extends Component {
   }
 
   render () {
-    const { post, commentsList, commentId, updateCommentClicked } = this.state
+    const { post, commentsList, commentId, updateCommentClicked, showUpdateCommentModal } = this.state
     const { msgAlert, user } = this.props
 
     if (!post) {
@@ -180,12 +192,12 @@ class PostShow extends Component {
 
     let showDisplay
 
-    if (!updateCommentClicked && userId !== ownerId) {
+    if (!updateCommentClicked && !showUpdateCommentModal && userId !== ownerId) {
       const commentsJsx = commentsList.map(comment => (
         <li
           key={comment._id}>
-          {comment.content.content}
-
+          {comment.content}
+          <br/>
           <button
             variant="primary"
             type="button"
@@ -195,12 +207,10 @@ class PostShow extends Component {
           </button>
           <button
             onClick={(event) => {
-              this.commentDelete(comment._id, event)
-              this.deleteComment(comment._id, event)
+              this.commentDelete(comment._id, event.target)
             }}>Delete Comment</button>
         </li>
-      )
-      )
+      ))
 
       showDisplay = (
         <div>
@@ -228,12 +238,12 @@ class PostShow extends Component {
           </div>
         </div>
       )
-    } else if (!updateCommentClicked && commentsList !== null) {
+    } else if (!updateCommentClicked && !showUpdateCommentModal && commentsList !== null) {
       const commentsJsx = commentsList.map(comment => (
         <li
           key={comment._id}>
           {comment.content}
-
+          <br/>
           <button
             variant="primary"
             type="button"
@@ -244,19 +254,18 @@ class PostShow extends Component {
           <button
             onClick={(event) => {
               this.commentDelete(comment._id, event.target)
-              this.deleteComment(comment._id, event.target)
             }}>Delete Comment</button>
         </li>
       ))
 
       showDisplay = (
         <div>
-          <button onClick={this.onPostDelete}>Delete</button>
-          <button>
+          <Button onClick={this.onPostDelete} variant="info">Delete</Button>
+          <Button variant="info">
             <Link to={`/update-post/${post._id}`}>
             Update
             </Link>
-          </button>
+          </Button>
           <h3>{post.title}</h3>
           <h5>Author: {post.author}</h5>
           <h6>{post.content}</h6>
@@ -283,30 +292,44 @@ class PostShow extends Component {
       )
     }
 
-    if (updateCommentClicked) {
+    if (showUpdateCommentModal) {
       return (
         <div>
-          <Form onSubmit={(event) => {
-            this.handleUpdate(commentId, event)
-          }}>
-            <Form.Group controlId="formBasicContent">
-              <Form.Label>Comment</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                name="content"
-                placeholder="Update comment here"
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-
-            <Button
-              variant="primary"
-              type="submit"
-            >
-              Submit
-            </Button>
-          </Form>
+          <Modal
+            show={showUpdateCommentModal}
+            onHide={this.handleClose}
+            backdrop="static"
+            keyboard={false}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Update Your Comment!</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form onSubmit={(event) => {
+                this.handleUpdate(commentId, event)
+              }}>
+                <Form.Group controlId="formBasicContent">
+                  <Form.Label>Comment</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    name="content"
+                    placeholder="Update comment here"
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
+                <Button variant="secondary" onClick={this.handleClose}>
+                  Close
+                </Button>
+                <Button
+                  variant="primary"
+                  type="submit"
+                >
+                  Submit
+                </Button>
+              </Form>
+            </Modal.Body>
+          </Modal>
         </div>
       )
     }
