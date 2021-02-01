@@ -36,7 +36,7 @@ export const updateComment = async (content, user, postId, commentId) => {
 }
 
 // Delete
-export const commentDestroy = (commentId, postId, user) => {
+export const commentDestroy = async (commentId, postId, user) => {
   return axios({
     url: apiUrl + '/comments/' + commentId,
     method: 'DELETE',

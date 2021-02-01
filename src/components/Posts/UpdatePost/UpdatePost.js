@@ -5,6 +5,7 @@ import { Redirect, withRouter } from 'react-router-dom'
 
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
 // import ButtonGroup from 'react-bootstrap/ButtonGroup'
 // import ToggleButton from 'react-bootstrap/ToggleButton'
 
@@ -23,9 +24,23 @@ class UpdatePost extends Component {
         comments: []
       },
       createId: null,
-      updated: false
+      updated: false,
+      showUpdateModal: true
     }
   }
+
+  handleClose = (event) => {
+    const { history } = this.props
+    this.setState({ showUpdateModal: false })
+    // return (
+    //   <Redirect to={`/posts/${this.props.match.params.id}`} />
+    // )
+    history.push(`/posts/${this.props.match.params.id}`)
+  }
+
+  // handleShow = (event) => {
+  //   this.setState({ showUpdateModal: true })
+  // }
 
   handleChange = event => {
     event.persist()
@@ -93,45 +108,54 @@ class UpdatePost extends Component {
 
     return (
       <div>
-        <h3>Update Your Post</h3>
-        <Form onSubmit={this.handleSubmit}>
-          <Form.Group controlId="formBasicTitle">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              type="text"
-              name="title"
-              placeholder="Enter Title"
-              onChange={this.handleChange}
-            />
-          </Form.Group>
+        <Modal show={this.state.showUpdateModal} backdrop="static" keyboard={false} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Update Your Post!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={this.handleSubmit}>
+              <Form.Group controlId="formBasicTitle">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  placeholder="Enter Title"
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
 
-          <Form.Group controlId="formBasicAuthor">
-            <Form.Label>Author</Form.Label>
-            <Form.Control
-              type="text"
-              name="author"
-              placeholder="Author"
-              onChange={this.handleChange}
-            />
-          </Form.Group>
+              <Form.Group controlId="formBasicAuthor">
+                <Form.Label>Author</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="author"
+                  placeholder="Author"
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
 
-          <Form.Group controlId="formBasicContent">
-            <Form.Label>Content</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              name="content"
-              placeholder="Content"
-              onChange={this.handleChange}
-            />
-          </Form.Group>
-          <Button
-            variant="primary"
-            type="submit"
-          >
-            Submit
-          </Button>
-        </Form>
+              <Form.Group controlId="formBasicContent">
+                <Form.Label>Content</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  name="content"
+                  placeholder="Content"
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
+              <Button variant="secondary" onClick={this.handleClose}>
+                Close
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+              >
+                Submit
+              </Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
       </div>
     )
   }
