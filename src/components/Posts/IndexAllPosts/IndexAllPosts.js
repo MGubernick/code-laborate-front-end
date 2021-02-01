@@ -35,7 +35,7 @@ class PostIndexAll extends Component {
   }
 
   render () {
-    console.log('this is posts: ', this.state.posts)
+    // console.log('this is posts: ', this.state.posts)
     const { posts } = this.state
     if (!posts) {
       return 'Loading...'
