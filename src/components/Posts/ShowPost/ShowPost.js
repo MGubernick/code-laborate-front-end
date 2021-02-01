@@ -131,20 +131,6 @@ class PostShow extends Component {
       })
   }
 
-  // matchCommentOwner = () => {
-  //   const { user } = this.props
-  //   const { commentsList } = this.state
-  //   const newCommentsList = commentsList.map(cmt => {
-  //     if (cmt.owner === user._id) {
-  //       cmt.idMatch = true
-  //     } else {
-  //       cmt.idMatch = false
-  //     }
-  //   })
-  //   this.setState({ commentsList: newCommentsList })
-  //   console.log('this is commentsList after the matchCommentOwner function', commentsList)
-  // }
-
   componentDidMount () {
     const { user, match, msgAlert } = this.props
 
@@ -188,24 +174,31 @@ class PostShow extends Component {
 
     let showDisplay
 
-    // <button
-    //   variant="primary"
-    //   type="button"
-    //   onClick={(event) => this.handleUpdateClicked(comment._id, event)}
-    // >
-    //   Update
-    // </button>
-
     if (!updateCommentClicked && !showUpdateCommentModal && userId !== ownerId) {
       const commentsJsx = commentsList.map(comment => (
         <li
           key={comment._id}>
           {comment.content}
           <br/>
-          <button
-            onClick={(event) => {
-              this.commentDelete(comment._id, event.target)
-            }}>Delete Comment</button>
+          {comment.owner === user._id
+            ? <div>
+              <Button
+                variant="primary"
+                type="button"
+                onClick={(event) => this.handleUpdateClicked(comment._id, event)}
+              >
+                Update
+              </Button>
+              <Button
+                variant='danger'
+                type='button'
+                onClick={(event) => {
+                  this.commentDelete(comment._id, event.target)
+                }}>
+                Delete Comment
+              </Button>
+            </div>
+            : null}
         </li>
       ))
 
@@ -234,17 +227,25 @@ class PostShow extends Component {
           key={comment._id}>
           {comment.content}
           <br/>
-          <button
-            variant="primary"
-            type="button"
-            onClick={(event) => this.handleUpdateClicked(comment._id, event)}
-          >
-            Update
-          </button>
-          <button
-            onClick={(event) => {
-              this.commentDelete(comment._id, event.target)
-            }}>Delete Comment</button>
+          {comment.owner === user._id
+            ? <div>
+              <Button
+                variant="primary"
+                type="button"
+                onClick={(event) => this.handleUpdateClicked(comment._id, event)}
+              >
+                Update
+              </Button>
+              <Button
+                variant='danger'
+                type='button'
+                onClick={(event) => {
+                  this.commentDelete(comment._id, event.target)
+                }}>
+                Delete Comment
+              </Button>
+            </div>
+            : null}
         </li>
       ))
 
