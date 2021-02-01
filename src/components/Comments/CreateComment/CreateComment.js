@@ -46,11 +46,12 @@ const CreateComment = props => {
 
   return (
     <Fragment>
-      <Form onSubmit={handleSubmit}>
+      <Form style={{ marginTop: '10px' }} onSubmit={handleSubmit}>
         <Form.Group controlId="commentContent">
           <Form.Control
-            type="textarea"
+            as="textarea"
             rows={3}
+            columns={3}
             name="content"
             placeholder="comment here"
             onChange={handleChange}

@@ -8,6 +8,7 @@ import { commentDestroy, updateComment } from '../../../api/comments'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
+import Card from 'react-bootstrap/Card'
 
 import CreateComment from './../../Comments/CreateComment/CreateComment'
 // import ShowComments from './../../Comments/ShowComments/ShowComments'
@@ -176,30 +177,32 @@ class PostShow extends Component {
 
     if (!updateCommentClicked && !showUpdateCommentModal && userId !== ownerId) {
       const commentsJsx = commentsList.map(comment => (
-        <li
-          key={comment._id}>
-          {comment.content}
-          <br/>
-          {comment.owner === user._id
-            ? <div>
-              <Button
-                variant="primary"
-                type="button"
-                onClick={(event) => this.handleUpdateClicked(comment._id, event)}
-              >
-                Update
-              </Button>
-              <Button
-                variant='danger'
-                type='button'
-                onClick={(event) => {
-                  this.commentDelete(comment._id, event.target)
-                }}>
-                Delete Comment
-              </Button>
-            </div>
-            : null}
-        </li>
+        comment.owner === user._id
+          ? <Card key={comment._id} style={{ width: '100%', marginTop: '10px' }}>
+            <Card.Body>
+              <Card.Text>{comment.content}</Card.Text>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  variant="outline-primary"
+                  type="button"
+                  onClick={(event) => this.handleUpdateClicked(comment._id, event)}
+                >
+                  Update
+                </Button>
+                <Button
+                  style={{ marginLeft: '10px' }}
+                  variant='outline-danger'
+                  type='button'
+                  onClick={(event) => {
+                    this.commentDelete(comment._id, event.target)
+                  }}>
+                  Delete Comment
+                </Button>
+              </div>
+            </Card.Body>
+          </Card>
+
+          : null
       ))
 
       showDisplay = (
@@ -207,65 +210,69 @@ class PostShow extends Component {
           <h3>{post.title}</h3>
           <h5>Author: {post.author}</h5>
           <h6>{post.content}</h6>
+          <Button onClick={this.updatePostClicked} variant="primary">Update</Button>
+          <Button style={{ marginLeft: '10px' }} onClick={this.onPostDelete} variant="outline-danger">Delete</Button>
           <h5>Comments:</h5>
-          <CreateComment
-            user={user}
-            post={post}
-            msgAlert={msgAlert}
-            addNewComment={this.addNewComment}
-          />
           <div className="showCommentContainer">
             <ul>
               {commentsJsx}
+              <CreateComment
+                user={user}
+                post={post}
+                msgAlert={msgAlert}
+                addNewComment={this.addNewComment}
+              />
             </ul>
           </div>
         </div>
       )
     } else if (!updateCommentClicked && !showUpdateCommentModal && commentsList !== null) {
       const commentsJsx = commentsList.map(comment => (
-        <li
-          key={comment._id}>
-          {comment.content}
-          <br/>
-          {comment.owner === user._id
-            ? <div>
-              <Button
-                variant="primary"
-                type="button"
-                onClick={(event) => this.handleUpdateClicked(comment._id, event)}
-              >
-                Update
-              </Button>
-              <Button
-                variant='danger'
-                type='button'
-                onClick={(event) => {
-                  this.commentDelete(comment._id, event.target)
-                }}>
-                Delete Comment
-              </Button>
-            </div>
-            : null}
-        </li>
+        comment.owner === user._id
+          ? <Card key={comment._id} style={{ width: '100%', marginTop: '10px' }}>
+            <Card.Body>
+              <Card.Text>{comment.content}</Card.Text>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  variant="outline-primary"
+                  type="button"
+                  onClick={(event) => this.handleUpdateClicked(comment._id, event)}
+                >
+                  Update
+                </Button>
+                <Button
+                  style={{ marginLeft: '10px' }}
+                  variant='outline-danger'
+                  type='button'
+                  onClick={(event) => {
+                    this.commentDelete(comment._id, event.target)
+                  }}>
+                  Delete Comment
+                </Button>
+              </div>
+            </Card.Body>
+          </Card>
+
+          : null
       ))
 
       showDisplay = (
         <div>
-          <Button onClick={this.onPostDelete} variant="info">Delete</Button>
-          <Button onClick={this.updatePostClicked} variant="info">Update</Button>
           <h3>{post.title}</h3>
           <h5>Author: {post.author}</h5>
           <h6>{post.content}</h6>
+          <Button onClick={this.updatePostClicked} variant="primary">Update</Button>
+          <Button style={{ marginLeft: '10px' }} onClick={this.onPostDelete} variant="outline-danger">Delete</Button>
           <h5>Comments:</h5>
-          <CreateComment
-            user={user}
-            post={post}
-            msgAlert={msgAlert}
-            addNewComment={this.addNewComment}
-          />
           <div className="showCommentContainer">
             <ul>
               {commentsJsx}
+              <CreateComment
+                user={user}
+                post={post}
+                msgAlert={msgAlert}
+                addNewComment={this.addNewComment}
+              />
             </ul>
           </div>
         </div>
