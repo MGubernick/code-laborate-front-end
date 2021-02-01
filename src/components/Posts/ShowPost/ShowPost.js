@@ -24,7 +24,6 @@ class PostShow extends Component {
       showUpdateCommentModal: false,
       updatePostButtonClicked: false,
       commentId: null,
-      commentOwner: null,
       content: null,
       commentsList: []
     }
@@ -39,7 +38,7 @@ class PostShow extends Component {
   addNewComment = (comment) => {
     const { match, user } = this.props
     showPost(match.params.id, user)
-      .then(res => this.setState({ post: res.data.post, commentsList: res.data.post.comments, commentOwner: comment.owner }))
+      .then(res => this.setState({ post: res.data.post, commentsList: res.data.post.comments }))
   }
 
   async commentDelete (commentId, event) {
