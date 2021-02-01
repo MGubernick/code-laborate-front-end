@@ -42,7 +42,7 @@ class PostIndexUser extends Component {
       return 'Loading...'
     }
     const postsJsx = posts.map(post => (
-      <Card key={post._id} style={{ width: '100%' }}>
+      <Card key={post._id} style={{ width: '100%', marginTop: '10px' }}>
         <Card.Body>
           <Card.Title>{post.title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">{post.owner.email}</Card.Subtitle>
