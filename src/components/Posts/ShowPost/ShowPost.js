@@ -8,6 +8,7 @@ import { commentDestroy, updateComment } from '../../../api/comments'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
+import Card from 'react-bootstrap/Card'
 
 import CreateComment from './../../Comments/CreateComment/CreateComment'
 // import ShowComments from './../../Comments/ShowComments/ShowComments'
@@ -37,6 +38,11 @@ class PostShow extends Component {
 
   addNewComment = (comment) => {
     const { match, user } = this.props
+    const { post } = this.state
+
+    post.comments.push(comment)
+
+    // console.log('this is now comment at ', comment)
     showPost(match.params.id, user)
       .then(res => this.setState({ post: res.data.post, commentsList: res.data.post.comments }))
   }
@@ -131,20 +137,6 @@ class PostShow extends Component {
       })
   }
 
-  // matchCommentOwner = () => {
-  //   const { user } = this.props
-  //   const { commentsList } = this.state
-  //   const newCommentsList = commentsList.map(cmt => {
-  //     if (cmt.owner === user._id) {
-  //       cmt.idMatch = true
-  //     } else {
-  //       cmt.idMatch = false
-  //     }
-  //   })
-  //   this.setState({ commentsList: newCommentsList })
-  //   console.log('this is commentsList after the matchCommentOwner function', commentsList)
-  // }
-
   componentDidMount () {
     const { user, match, msgAlert } = this.props
 
@@ -188,83 +180,119 @@ class PostShow extends Component {
 
     let showDisplay
 
-    // <button
-    //   variant="primary"
-    //   type="button"
-    //   onClick={(event) => this.handleUpdateClicked(comment._id, event)}
-    // >
-    //   Update
-    // </button>
-
+    // console.log('this is commentsList before map', commentsList)
+    // console.log('this is post before map', post)
     if (!updateCommentClicked && !showUpdateCommentModal && userId !== ownerId) {
       const commentsJsx = commentsList.map(comment => (
-        <li
-          key={comment._id}>
-          {comment.content}
-          <br/>
-          <button
-            onClick={(event) => {
-              this.commentDelete(comment._id, event.target)
-            }}>Delete Comment</button>
-        </li>
+        <Card key={comment._id} style={{ width: '100%', marginTop: '10px' }}>
+          <Card.Body>
+            <Card.Text style={{ color: 'grey', fontSize: '12px' }}>
+              {comment.owner.email}
+            </Card.Text>
+            <br/>
+            <div style={{ whiteSpace: 'pre-wrap' }}>
+              {comment.content}
+            </div>
+            {comment.owner._id === user._id
+              ? <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  variant="outline-primary"
+                  type="button"
+                  onClick={(event) => this.handleUpdateClicked(comment._id, event)}
+                >
+                  Update
+                </Button>
+                <Button
+                  style={{ marginLeft: '10px' }}
+                  variant='outline-danger'
+                  type='button'
+                  onClick={(event) => {
+                    this.commentDelete(comment._id, event.target)
+                  }}>
+                  Delete Comment
+                </Button>
+              </div>
+              : null }
+          </Card.Body>
+        </Card>
+
       ))
 
       showDisplay = (
         <div>
           <h3>{post.title}</h3>
           <h5>Author: {post.author}</h5>
-          <h6>{post.content}</h6>
+          <h6 style={{ whiteSpace: 'pre-wrap' }}>
+            {post.content}
+          </h6>
           <h5>Comments:</h5>
-          <CreateComment
-            user={user}
-            post={post}
-            msgAlert={msgAlert}
-            addNewComment={this.addNewComment}
-          />
           <div className="showCommentContainer">
             <ul>
               {commentsJsx}
+              <CreateComment
+                user={user}
+                post={post}
+                msgAlert={msgAlert}
+                addNewComment={this.addNewComment}
+              />
             </ul>
           </div>
         </div>
       )
     } else if (!updateCommentClicked && !showUpdateCommentModal && commentsList !== null) {
       const commentsJsx = commentsList.map(comment => (
-        <li
-          key={comment._id}>
-          {comment.content}
-          <br/>
-          <button
-            variant="primary"
-            type="button"
-            onClick={(event) => this.handleUpdateClicked(comment._id, event)}
-          >
-            Update
-          </button>
-          <button
-            onClick={(event) => {
-              this.commentDelete(comment._id, event.target)
-            }}>Delete Comment</button>
-        </li>
+        <Card key={comment._id} style={{ width: '100%', marginTop: '10px' }}>
+          <Card.Body>
+            <Card.Text style={{ color: 'grey', fontSize: '12px' }}>
+              {comment.owner.email}
+            </Card.Text>
+            <br/>
+            <div style={{ whiteSpace: 'pre-wrap' }}>
+              {comment.content}
+            </div>
+            {comment.owner._id === user._id
+              ? <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                  variant="outline-primary"
+                  type="button"
+                  onClick={(event) => this.handleUpdateClicked(comment._id, event)}
+                >
+                  Update
+                </Button>
+                <Button
+                  style={{ marginLeft: '10px' }}
+                  variant='outline-danger'
+                  type='button'
+                  onClick={(event) => {
+                    this.commentDelete(comment._id, event.target)
+                  }}>
+                  Delete Comment
+                </Button>
+              </div>
+              : null }
+          </Card.Body>
+        </Card>
       ))
 
       showDisplay = (
         <div>
-          <Button onClick={this.onPostDelete} variant="info">Delete</Button>
-          <Button onClick={this.updatePostClicked} variant="info">Update</Button>
           <h3>{post.title}</h3>
           <h5>Author: {post.author}</h5>
-          <h6>{post.content}</h6>
+          <h6 style={{ whiteSpace: 'pre-wrap' }}>
+            {post.content}
+          </h6>
+          <Button onClick={this.updatePostClicked} variant="primary">Update</Button>
+          <Button style={{ marginLeft: '10px' }} onClick={this.onPostDelete} variant="outline-danger">Delete</Button>
           <h5>Comments:</h5>
-          <CreateComment
-            user={user}
-            post={post}
-            msgAlert={msgAlert}
-            addNewComment={this.addNewComment}
-          />
           <div className="showCommentContainer">
             <ul>
               {commentsJsx}
+              <CreateComment
+                user={user}
+                post={post}
+                msgAlert={msgAlert}
+                addNewComment={this.addNewComment}
+              />
             </ul>
           </div>
         </div>
