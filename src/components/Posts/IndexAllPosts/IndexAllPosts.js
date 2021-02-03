@@ -56,7 +56,9 @@ class PostIndexAll extends Component {
       <div>
         <h3>Welcome</h3>
         <ul>
-          {postsJsx.reverse()}
+          <div style={{ whiteSpace: 'pre-wrap' }}>
+            {postsJsx.reverse()}
+          </div>
         </ul>
       </div>
     )
