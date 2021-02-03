@@ -177,6 +177,8 @@ class PostShow extends Component {
     // else show buttons
     const userId = user._id
     const ownerId = post.owner._id
+    console.log('this is userId', userId)
+    console.log('this is ownerId', ownerId)
 
     let showDisplay
 
