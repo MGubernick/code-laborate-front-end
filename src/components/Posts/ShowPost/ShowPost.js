@@ -38,6 +38,11 @@ class PostShow extends Component {
 
   addNewComment = (comment) => {
     const { match, user } = this.props
+    const { post } = this.state
+
+    post.comments.push(comment)
+
+    // console.log('this is now comment at ', comment)
     showPost(match.params.id, user)
       .then(res => this.setState({ post: res.data.post, commentsList: res.data.post.comments }))
   }
@@ -175,13 +180,21 @@ class PostShow extends Component {
 
     let showDisplay
 
+    // console.log('this is commentsList before map', commentsList)
+    // console.log('this is post before map', post)
     if (!updateCommentClicked && !showUpdateCommentModal && userId !== ownerId) {
       const commentsJsx = commentsList.map(comment => (
-        comment.owner === user._id
-          ? <Card key={comment._id} style={{ width: '100%', marginTop: '10px' }}>
-            <Card.Body>
-              <Card.Text>{comment.content}</Card.Text>
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Card key={comment._id} style={{ width: '100%', marginTop: '10px' }}>
+          <Card.Body>
+            <Card.Text style={{ color: 'grey', fontSize: '12px' }}>
+              {comment.owner.email}
+            </Card.Text>
+            <br/>
+            <div style={{ whiteSpace: 'pre-wrap' }}>
+              {comment.content}
+            </div>
+            {comment.owner._id === user._id
+              ? <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
                   variant="outline-primary"
                   type="button"
@@ -199,19 +212,19 @@ class PostShow extends Component {
                   Delete Comment
                 </Button>
               </div>
-            </Card.Body>
-          </Card>
+              : null }
+          </Card.Body>
+        </Card>
 
-          : null
       ))
 
       showDisplay = (
         <div>
           <h3>{post.title}</h3>
           <h5>Author: {post.author}</h5>
-          <h6>{post.content}</h6>
-          <Button onClick={this.updatePostClicked} variant="primary">Update</Button>
-          <Button style={{ marginLeft: '10px' }} onClick={this.onPostDelete} variant="outline-danger">Delete</Button>
+          <h6 style={{ whiteSpace: 'pre-wrap' }}>
+            {post.content}
+          </h6>
           <h5>Comments:</h5>
           <div className="showCommentContainer">
             <ul>
@@ -228,11 +241,17 @@ class PostShow extends Component {
       )
     } else if (!updateCommentClicked && !showUpdateCommentModal && commentsList !== null) {
       const commentsJsx = commentsList.map(comment => (
-        comment.owner === user._id
-          ? <Card key={comment._id} style={{ width: '100%', marginTop: '10px' }}>
-            <Card.Body>
-              <Card.Text>{comment.content}</Card.Text>
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Card key={comment._id} style={{ width: '100%', marginTop: '10px' }}>
+          <Card.Body>
+            <Card.Text style={{ color: 'grey', fontSize: '12px' }}>
+              {comment.owner.email}
+            </Card.Text>
+            <br/>
+            <div style={{ whiteSpace: 'pre-wrap' }}>
+              {comment.content}
+            </div>
+            {comment.owner._id === user._id
+              ? <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
                   variant="outline-primary"
                   type="button"
@@ -250,17 +269,18 @@ class PostShow extends Component {
                   Delete Comment
                 </Button>
               </div>
-            </Card.Body>
-          </Card>
-
-          : null
+              : null }
+          </Card.Body>
+        </Card>
       ))
 
       showDisplay = (
         <div>
           <h3>{post.title}</h3>
           <h5>Author: {post.author}</h5>
-          <h6>{post.content}</h6>
+          <h6 style={{ whiteSpace: 'pre-wrap' }}>
+            {post.content}
+          </h6>
           <Button onClick={this.updatePostClicked} variant="primary">Update</Button>
           <Button style={{ marginLeft: '10px' }} onClick={this.onPostDelete} variant="outline-danger">Delete</Button>
           <h5>Comments:</h5>

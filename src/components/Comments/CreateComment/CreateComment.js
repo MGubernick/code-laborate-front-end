@@ -50,6 +50,7 @@ const CreateComment = props => {
         <Form.Group controlId="commentContent">
           <Form.Control
             as="textarea"
+            multiline="true"
             rows={3}
             columns={3}
             name="content"
