@@ -45,7 +45,7 @@ class PostIndexAll extends Component {
       <Card key={post._id} style={{ width: '100%', marginTop: '10px' }}>
         <Card.Body>
           <Card.Title>{post.title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">{post.owner.email}</Card.Subtitle>
+          <Card.Subtitle className="mb-2 text-muted">{post.author}</Card.Subtitle>
           <Card.Text>{post.content}</Card.Text>
           <Card.Link href={`#posts/${post._id}`}>See Full Post</Card.Link>
         </Card.Body>
