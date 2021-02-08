@@ -109,10 +109,10 @@ class UpdatePost extends Component {
     return (
       <div>
         <Modal show={this.state.showUpdateModal} backdrop="static" keyboard={false} onHide={this.handleClose}>
-          <Modal.Header closeButton>
+          <Modal.Header style={{ color: '#fff', backgroundColor: '#114b5f' }} closeButton>
             <Modal.Title>Update Your Post!</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body style={{ backgroundColor: '#f3e9d2' }}>
             <Form onSubmit={this.handleSubmit}>
               <Form.Group controlId="formBasicTitle">
                 <Form.Label>Title</Form.Label>
