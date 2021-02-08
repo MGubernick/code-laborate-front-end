@@ -1,1 +1,10 @@
+$primary: #1a936f;
+$secondary: #114b5f;
+
 @import '~bootstrap/scss/bootstrap';
+
+$content-bg: #f3e9d2;
+
+.content-bg {
+  background-color: $content-bg;
+}

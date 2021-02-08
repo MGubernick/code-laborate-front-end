@@ -42,7 +42,7 @@ class PostIndexAll extends Component {
     }
 
     const postsJsx = posts.map(post => (
-      <Card key={post._id} style={{ width: '100%', marginTop: '10px' }}>
+      <Card key={post._id} className='content-bg' style={{ border: '1px solid #cbcbcb', margin: '10px', padding: '10px', width: '100%', marginTop: '10px' }}>
         <Card.Body>
           <Card.Title>{post.title}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted">{post.author}</Card.Subtitle>
@@ -54,7 +54,7 @@ class PostIndexAll extends Component {
 
     return (
       <div>
-        <h3>Welcome</h3>
+        <h2>Welcome</h2>
         <ul>
           <div style={{ whiteSpace: 'pre-wrap' }}>
             {postsJsx.reverse()}
