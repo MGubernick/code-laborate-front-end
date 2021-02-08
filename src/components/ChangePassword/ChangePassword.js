@@ -70,10 +70,10 @@ class ChangePassword extends Component {
             backdrop="static"
             keyboard={false}
           >
-            <Modal.Header closeButton>
+            <Modal.Header style={{ color: '#fff', backgroundColor: '#114b5f' }} closeButton>
               <Modal.Title>Want To Change Your Password?</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body style={{ backgroundColor: '#f3e9d2' }}>
               <Form onSubmit={this.onChangePassword}>
                 <Form.Group controlId="oldPassword">
                   <Form.Label>Old password</Form.Label>

@@ -13,6 +13,8 @@ import Card from 'react-bootstrap/Card'
 import CreateComment from './../../Comments/CreateComment/CreateComment'
 // import ShowComments from './../../Comments/ShowComments/ShowComments'
 
+import '../../../index.scss'
+
 class PostShow extends Component {
   constructor (props) {
     super(props)
@@ -42,7 +44,6 @@ class PostShow extends Component {
 
     post.comments.push(comment)
 
-    // console.log('this is now comment at ', comment)
     showPost(match.params.id, user)
       .then(res => this.setState({ post: res.data.post, commentsList: res.data.post.comments }))
   }
@@ -177,16 +178,12 @@ class PostShow extends Component {
     // else show buttons
     const userId = user._id
     const ownerId = post.owner._id
-    console.log('this is userId', userId)
-    console.log('this is ownerId', ownerId)
 
     let showDisplay
 
-    // console.log('this is commentsList before map', commentsList)
-    // console.log('this is post before map', post)
     if (!updateCommentClicked && !showUpdateCommentModal && userId !== ownerId) {
       const commentsJsx = commentsList.map(comment => (
-        <Card key={comment._id} style={{ width: '100%', marginTop: '10px' }}>
+        <Card key={comment._id} className='content-bg' style={{ width: '100%', marginTop: '10px' }}>
           <Card.Body>
             <Card.Text style={{ color: 'grey', fontSize: '12px' }}>
               {comment.owner.email}
@@ -224,9 +221,11 @@ class PostShow extends Component {
         <div>
           <h3>{post.title}</h3>
           <h5>Author: {post.author}</h5>
-          <h6 style={{ whiteSpace: 'pre-wrap' }}>
-            {post.content}
-          </h6>
+          <div className='content-bg' style={{ border: '1px solid #cbcbcb', margin: '10px', padding: '10px' }}>
+            <h6 style={{ whiteSpace: 'pre-wrap' }}>
+              {post.content}
+            </h6>
+          </div>
           <h5>Comments:</h5>
           <div className="showCommentContainer">
             <ul>
@@ -243,7 +242,7 @@ class PostShow extends Component {
       )
     } else if (!updateCommentClicked && !showUpdateCommentModal && commentsList !== null) {
       const commentsJsx = commentsList.map(comment => (
-        <Card key={comment._id} style={{ width: '100%', marginTop: '10px' }}>
+        <Card key={comment._id} className='content-bg' style={{ width: '100%', marginTop: '10px' }}>
           <Card.Body>
             <Card.Text style={{ color: 'grey', fontSize: '12px' }}>
               {comment.owner.email}
@@ -280,9 +279,11 @@ class PostShow extends Component {
         <div>
           <h3>{post.title}</h3>
           <h5>Author: {post.author}</h5>
-          <h6 style={{ whiteSpace: 'pre-wrap' }}>
-            {post.content}
-          </h6>
+          <div className='content-bg' style={{ border: '1px solid #cbcbcb', borderRadius: '4px', margin: '10px', padding: '10px' }}>
+            <h6 style={{ whiteSpace: 'pre-wrap' }}>
+              {post.content}
+            </h6>
+          </div>
           <Button onClick={this.updatePostClicked} variant="primary">Update</Button>
           <Button style={{ marginLeft: '10px' }} onClick={this.onPostDelete} variant="outline-danger">Delete</Button>
           <h5>Comments:</h5>
@@ -310,10 +311,10 @@ class PostShow extends Component {
             backdrop="static"
             keyboard={false}
           >
-            <Modal.Header closeButton>
+            <Modal.Header sstyle={{ color: '#fff', backgroundColor: '#114b5f' }} closeButton>
               <Modal.Title>Update Your Comment!</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body style={{ backgroundColor: '#f3e9d2' }}>
               <Form onSubmit={(event) => {
                 this.handleUpdate(commentId, event)
               }}>

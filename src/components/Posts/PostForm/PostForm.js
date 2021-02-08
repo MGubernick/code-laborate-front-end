@@ -32,10 +32,10 @@ const PostForm = ({ post, handleSubmit, handleChange }) => {
       backdrop="static"
       keyboard={false}
     >
-      <Modal.Header closeButton>
+      <Modal.Header style={{ color: '#fff', backgroundColor: '#114b5f' }} closeButton>
         <Modal.Title>Create A Post!</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body style={{ backgroundColor: '#f3e9d2' }}>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formBasicTitle">
             <Form.Label>Title</Form.Label>
